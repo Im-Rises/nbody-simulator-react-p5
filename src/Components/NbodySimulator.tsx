@@ -36,7 +36,7 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		// attractorMass = 250,
 		// friction = 0.99,
 		// distanceOffset = 10,
-		// pixelsPerMeter = 100,
+		pixelsPerMeter = 100,
 		// initColor = [0, 255, 255, 200],
 		// finalColor = [255, 0, 255, 200],
 		// maxColorVelocity = 5,

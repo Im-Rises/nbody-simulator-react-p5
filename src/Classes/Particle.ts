@@ -6,7 +6,7 @@ class Particle {
 	velocity: p5Types.Vector;
 
 	constructor(p5: p5Types, x: number, y: number) {
-		this.position = p5.createVector(0, 0);
+		this.position = p5.createVector(x, y);
 		this.velocity = p5.createVector(0, 0);
 	}
 
@@ -18,6 +18,13 @@ class Particle {
 				const strength = (G * Particle.mass * Particle.mass) / (distance * distance);
 				force.setMag(strength);
 				this.velocity.add(force);
+
+				// const distance = this.position.dist(particle.position);
+				// const force = (G * Particle.mass * Particle.mass) / (distance * distance);
+				// const direction = p5.Vector.sub(particle.position, this.position);
+				// direction.normalize();
+				// direction.mult(force);
+				// this.velocity.add(direction);
 			}
 		}
 	}
