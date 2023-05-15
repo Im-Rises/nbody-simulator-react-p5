@@ -5,6 +5,7 @@ class Particle {
 	static initColor: p5Types.Color;
 	static finalColor: p5Types.Color;
 	static maxForceMagColor: number;
+	static softening = 0.1;
 
 	static setInitialColor(initialColor: p5Types.Color) {
 		Particle.initColor = initialColor;
@@ -18,6 +19,10 @@ class Particle {
 		this.maxForceMagColor = value;
 	}
 
+	static setSoftening(value: number) {
+		this.softening = value;
+	}
+
 	position: p5Types.Vector;
 	velocity: p5Types.Vector;
 	color: p5Types.Color;
@@ -29,18 +34,24 @@ class Particle {
 	}
 
 	update(p5: p5Types, particles: Particle[], deltaTime: number, G: number, pixelPerMeter: number) {
+		const positionNormalized = this.position.copy().div(pixelPerMeter);
+		const force = p5.createVector(0, 0);
 		for (const particle of particles) {
 			if (particle !== this) {
-				const positionNormalized = this.position.copy().div(pixelPerMeter);
-				const particlePositionNormalized = particle.position.copy().div(pixelPerMeter);
-				const distance = positionNormalized.dist(particlePositionNormalized);
-				const force = G * (Particle.mass * Particle.mass) / (distance * distance);
-				const direction = particlePositionNormalized.copy().sub(positionNormalized).normalize();
-				const acceleration = direction.copy().mult(force / Particle.mass);
-				this.velocity.add(acceleration.copy().mult(deltaTime));
-				this.position.add(this.velocity.copy().mult(deltaTime));
+				const otherPositionNormalized = particle.position.copy().div(pixelPerMeter);
+				const distance = positionNormalized.dist(otherPositionNormalized);
+				const direction = otherPositionNormalized.copy().sub(positionNormalized).normalize();
+				const forceMag = (G * Particle.mass * Particle.mass) / ((distance ** 2) + Particle.softening);
+				force.add(direction.mult(forceMag));
 			}
 		}
+
+		const acceleration = force.copy().div(Particle.mass);
+		positionNormalized.add(this.velocity.copy().div(pixelPerMeter).mult(deltaTime))
+			.add(acceleration.copy().div(2).mult(deltaTime ** 2));
+		this.velocity.add(acceleration.copy().mult(deltaTime));
+		// this.velocity.mult(friction);
+		this.position = positionNormalized.copy().mult(pixelPerMeter);
 
 		this.color = p5.lerpColor(Particle.initColor, Particle.finalColor, this.velocity.mag() / Particle.maxForceMagColor);
 	}

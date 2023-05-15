@@ -17,7 +17,7 @@ type ComponentProps = {
 	gravitationalConstant?: number;
 	// particlesMass?: number;
 	// friction?: number;
-	// softening?: number;
+	softening?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
@@ -36,7 +36,7 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		gravitationalConstant = 1,
 		// particlesMass = 50,
 		// friction = 0.99,
-		// softening = ,
+		softening = 0.1,
 		pixelsPerMeter = 100,
 		initColor = [0, 255, 255, 200],
 		finalColor = [255, 0, 255, 200],
@@ -71,6 +71,7 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		Particle.setInitialColor(p5.color(initColor[0], initColor[1], initColor[2], initColor[3]));
 		Particle.setFinalColor(p5.color(finalColor[0], finalColor[1], finalColor[2], finalColor[3]));
 		Particle.setMaxForceMagColor(maxForceMagColor);
+		Particle.setSoftening(softening);
 		for (let i = 0; i < (isMobile ? nbodyCountMobile : nbodyCountComputer); i++) {
 			// Define particles spawn in a circle
 			const randomFloat = (min: number, max: number) => min + ((max - min) * Math.random());
