@@ -15,31 +15,32 @@ type ComponentProps = {
 	fixedUpdate?: number;
 	spawnAreaRadius?: number;
 	gravitationalConstant?: number;
-	// particlesMass?: number;
-	// friction?: number;
+	particlesMass?: number;
+	softening?: number;
 	pixelsPerMeter?: number;
-	// initColor?: Quadruplet;
-	// finalColor?: Quadruplet;
+	initColor?: Quadruplet;
+	finalColor?: Quadruplet;
+	maxForceMagColor?: number;
 	backColor?: Quadruplet;
 };
 
 const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 	const {
 		parentRef,
-		nbodyCountMobile = NBODY_COUNT_MOBILE,
-		nbodyCountComputer = NBODY_COUNT_COMPUTER,
+		// nbodyCountMobile = NBODY_COUNT_MOBILE,
+		nbodyCountMobile = 2,
+		// nbodyCountComputer = NBODY_COUNT_COMPUTER,
+		nbodyCountComputer = 2,
 		frameRate = 60,
 		fixedUpdate = 60,
-		spawnAreaRadius = 100,
+		spawnAreaRadius = 300,
 		gravitationalConstant = 1,
-		// particlesMass = 50,
-		// attractorMass = 250,
-		// friction = 0.99,
-		// distanceOffset = 10,
+		particlesMass = 50,
+		softening = 4,
 		pixelsPerMeter = 100,
-		// initColor = [0, 255, 255, 200],
-		// finalColor = [255, 0, 255, 200],
-		// maxColorVelocity = 5,
+		initColor = [0, 255, 255, 200],
+		finalColor = [255, 0, 255, 200],
+		maxForceMagColor = 5,
 		backColor = [0, 0, 0, 255],
 	} = props;
 
@@ -67,6 +68,11 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		p5.frameRate(frameRate);
 
 		// Create particles
+		Particle.setMass(particlesMass);
+		Particle.setMaxForceMagColor(maxForceMagColor);
+		Particle.setSoftening(softening);
+		Particle.setInitialColor(p5.color(initColor[0], initColor[1], initColor[2], initColor[3]));
+		Particle.setFinalColor(p5.color(finalColor[0], finalColor[1], finalColor[2], finalColor[3]));
 		for (let i = 0; i < (isMobile ? nbodyCountMobile : nbodyCountComputer); i++) {
 			// Define particles spawn in a circle
 			const randomFloat = (min: number, max: number) => min + ((max - min) * Math.random());
@@ -92,7 +98,7 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 
 			// Update particles
 			for (const particle of particles) {
-				// particle.update(p5, particles, fixedDeltaTime, gravitationalConstant, pixelsPerMeter);
+				particle.update(p5, particles, fixedDeltaTime, gravitationalConstant, pixelsPerMeter);
 			}
 		}
 
@@ -104,11 +110,6 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		for (const particle of particles) {
 			particle.show(screenBuffer);
 		}
-
-		// screenBuffer.stroke(100);
-		// screenBuffer.strokeWeight(1);
-		// screenBuffer.fill(255, 0, 0);
-		// screenBuffer.circle(p5.width / 2, p5.height / 2, 100 * 2);
 
 		// Swap buffers
 		p5.image(screenBuffer, 0, 0);
