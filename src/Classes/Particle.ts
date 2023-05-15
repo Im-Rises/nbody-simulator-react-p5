@@ -4,6 +4,7 @@ class Particle {
 	static mass = 50;
 	static maxForceMagColor: number;
 	static softening: number;
+	static friction: number;
 	static initColor: p5Types.Color;
 	static finalColor: p5Types.Color;
 
@@ -17,6 +18,10 @@ class Particle {
 
 	static setSoftening(value: number) {
 		this.softening = value;
+	}
+
+	static setFriction(value: number) {
+		Particle.friction = value;
 	}
 
 	static setInitialColor(initialColor: p5Types.Color) {

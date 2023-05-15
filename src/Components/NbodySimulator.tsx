@@ -17,6 +17,7 @@ type ComponentProps = {
 	gravitationalConstant?: number;
 	particlesMass?: number;
 	softening?: number;
+	friction?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
@@ -24,19 +25,18 @@ type ComponentProps = {
 	backColor?: Quadruplet;
 };
 
-const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
+const ParticleSimulator = (props: ComponentProps) => {
 	const {
 		parentRef,
-		// nbodyCountMobile = NBODY_COUNT_MOBILE,
 		nbodyCountMobile = 2,
-		// nbodyCountComputer = NBODY_COUNT_COMPUTER,
 		nbodyCountComputer = 2,
 		frameRate = 60,
 		fixedUpdate = 60,
 		spawnAreaRadius = 300,
 		gravitationalConstant = 1,
 		particlesMass = 50,
-		softening = 4,
+		softening = 1,
+		friction = 1,
 		pixelsPerMeter = 100,
 		initColor = [0, 255, 255, 200],
 		finalColor = [255, 0, 255, 200],
@@ -71,6 +71,7 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		Particle.setMass(particlesMass);
 		Particle.setMaxForceMagColor(maxForceMagColor);
 		Particle.setSoftening(softening);
+		Particle.setFriction(friction);
 		Particle.setInitialColor(p5.color(initColor[0], initColor[1], initColor[2], initColor[3]));
 		Particle.setFinalColor(p5.color(finalColor[0], finalColor[1], finalColor[2], finalColor[3]));
 		for (let i = 0; i < (isMobile ? nbodyCountMobile : nbodyCountComputer); i++) {
@@ -88,7 +89,7 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 	const draw = (p5: p5Types) => {
 		/* Calculate deltaTime and update fixedUpdateAccum */
 		const currentTime = p5.millis();
-		const deltaTime = (currentTime - previousTime) / 1000;// in seconds
+		const deltaTime = (currentTime - previousTime) / 1000;
 		previousTime = currentTime;
 		fixedUpdateAccum += deltaTime;
 
