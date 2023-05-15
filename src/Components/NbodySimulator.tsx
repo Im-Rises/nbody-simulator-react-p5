@@ -15,8 +15,7 @@ type ComponentProps = {
 	fixedUpdate?: number;
 	spawnAreaRadius?: number;
 	gravitationalConstant?: number;
-	// particlesMass?: number;
-	// friction?: number;
+	particlesMass?: number;
 	softening?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
@@ -28,15 +27,16 @@ type ComponentProps = {
 const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 	const {
 		parentRef,
-		nbodyCountMobile = NBODY_COUNT_MOBILE,
-		nbodyCountComputer = NBODY_COUNT_COMPUTER,
+		// nbodyCountMobile = NBODY_COUNT_MOBILE,
+		nbodyCountMobile = 2,
+		// nbodyCountComputer = NBODY_COUNT_COMPUTER,
+		nbodyCountComputer = 2,
 		frameRate = 60,
 		fixedUpdate = 60,
-		spawnAreaRadius = 100,
+		spawnAreaRadius = 300,
 		gravitationalConstant = 1,
-		// particlesMass = 50,
-		// friction = 0.99,
-		softening = 0.1,
+		particlesMass = 50,
+		softening = 4,
 		pixelsPerMeter = 100,
 		initColor = [0, 255, 255, 200],
 		finalColor = [255, 0, 255, 200],
@@ -68,10 +68,11 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		p5.frameRate(frameRate);
 
 		// Create particles
-		Particle.setInitialColor(p5.color(initColor[0], initColor[1], initColor[2], initColor[3]));
-		Particle.setFinalColor(p5.color(finalColor[0], finalColor[1], finalColor[2], finalColor[3]));
+		Particle.setMass(particlesMass);
 		Particle.setMaxForceMagColor(maxForceMagColor);
 		Particle.setSoftening(softening);
+		Particle.setInitialColor(p5.color(initColor[0], initColor[1], initColor[2], initColor[3]));
+		Particle.setFinalColor(p5.color(finalColor[0], finalColor[1], finalColor[2], finalColor[3]));
 		for (let i = 0; i < (isMobile ? nbodyCountMobile : nbodyCountComputer); i++) {
 			// Define particles spawn in a circle
 			const randomFloat = (min: number, max: number) => min + ((max - min) * Math.random());
