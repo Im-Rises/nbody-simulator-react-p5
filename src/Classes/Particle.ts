@@ -28,11 +28,13 @@ class Particle {
 	}
 
 	position: p5Types.Vector;
+	acceleration: p5Types.Vector;
 	velocity: p5Types.Vector;
 	color: p5Types.Color;
 
 	constructor(p5: p5Types, x: number, y: number) {
 		this.position = p5.createVector(x, y);
+		this.acceleration = p5.createVector(0, 0);
 		this.velocity = p5.createVector(0, 0);
 		this.color = Particle.initColor;
 
@@ -45,7 +47,7 @@ class Particle {
 		// this.velocity = velocity;
 	}
 
-	update(p5: p5Types, particles: Particle[], deltaTime: number, G: number, pixelPerMeter: number) {
+	updateAcceleration(p5: p5Types, particles: Particle[], deltaTime: number, G: number, pixelPerMeter: number) {
 		// Normalize position to meters not pixels
 		const positionNormalized = this.position.copy().div(pixelPerMeter);
 
@@ -61,11 +63,20 @@ class Particle {
 			}
 		}
 
-		// Update position and velocity
-		const acceleration = force.copy().div(Particle.mass);
+		// Update acceleration
+		this.acceleration = force.copy().div(Particle.mass);
+
+		// Update color
+		this.color = p5.lerpColor(Particle.initColor, Particle.finalColor, this.velocity.mag() / Particle.maxForceMagColor);
+	}
+
+	updateVelocityAndPosition(p5: p5Types, deltaTime: number, pixelPerMeter: number) {
+		// Normalize position to meters not pixels
+		const positionNormalized = this.position.copy().div(pixelPerMeter);
+
 		positionNormalized.add(this.velocity.copy().div(pixelPerMeter).mult(deltaTime))
-			.add(acceleration.copy().div(2).mult(deltaTime ** 2));
-		this.velocity.add(acceleration.copy().mult(deltaTime));
+			.add(this.acceleration.copy().div(2).mult(deltaTime ** 2));
+		this.velocity.add(this.acceleration.copy().mult(deltaTime));
 		this.position = positionNormalized.copy().mult(pixelPerMeter);
 
 		if (this.position.x < 0) {
@@ -83,9 +94,6 @@ class Particle {
 		if (this.position.y > p5.height) {
 			this.position.y = 0;
 		}
-
-		// Update color
-		this.color = p5.lerpColor(Particle.initColor, Particle.finalColor, this.velocity.mag() / Particle.maxForceMagColor);
 	}
 
 	show(p5: p5Types) {
