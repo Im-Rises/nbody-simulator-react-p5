@@ -96,9 +96,14 @@ const ParticleSimulator: React.FC<ComponentProps> = (props: ComponentProps) => {
 		if (fixedUpdateAccum >= fixedDeltaTime) {
 			fixedUpdateAccum = 0;
 
-			// Update particles
+			// Update particles acceleration
 			for (const particle of particles) {
-				particle.update(p5, particles, fixedDeltaTime, gravitationalConstant, pixelsPerMeter);
+				particle.updateAcceleration(p5, particles, fixedDeltaTime, gravitationalConstant, pixelsPerMeter);
+			}
+
+			// Update particles velocity and position
+			for (const particle of particles) {
+				particle.updateVelocityAndPosition(p5, fixedDeltaTime, pixelsPerMeter);
 			}
 		}
 
