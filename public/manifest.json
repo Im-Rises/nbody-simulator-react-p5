@@ -1,6 +1,6 @@
 {
-  "short_name": "nbody-simulator",
-  "name": "nbody-simulator",
+  "short_name": "n-body-simulator",
+  "name": "N-Body Simulator",
   "icons": [
     {
       "src": "favicon.ico",
