@@ -62,6 +62,13 @@ const NbodySimulator = (props: ComponentProps) => {
 	let attractorPosition: p5Types.Vector;
 	let attractorScreenPosition: p5Types.Vector;
 
+	const forceDivCanvasHolderAndCanvasStyle = (canvas: p5Types.Element, canvasParentRef: Element) => {
+		// Set up canvas holder styles manually
+		canvasParentRef.setAttribute('style', 'overflow: hidden; width: 100%; height: 100%;');
+		// Set up canvas styles manually
+		canvas.attribute('style', 'overflow: hidden; width: 100%; height: 100%;');
+	};
+
 	// Sketch setup
 	const setup = (p5: p5Types, canvasParentRef: Element) => {
 		// Create canvas
@@ -70,6 +77,9 @@ const NbodySimulator = (props: ComponentProps) => {
 
 		// Create graphics
 		screenBuffer = p5.createGraphics(mergedProps.parentRef.current!.clientWidth, mergedProps.parentRef.current!.clientHeight, p5.P2D);
+
+		// Set up canvas holder and canvas styles
+		forceDivCanvasHolderAndCanvasStyle(canvas, canvasParentRef);
 
 		// Set frame rate to 60
 		p5.frameRate(mergedProps.frameRate);
@@ -94,9 +104,9 @@ const NbodySimulator = (props: ComponentProps) => {
 			const randomAngle1 = randomFloat(0, 2 * Math.PI);
 			const randomAngle2 = randomFloat(0, 2 * Math.PI);
 			const posX = ((p5.width / 2) / mergedProps.pixelsPerMeter)
-                + (mergedProps.spawnAreaRadius * Math.cos(randomAngle1) * Math.sin(randomAngle2));
+				+ (mergedProps.spawnAreaRadius * Math.cos(randomAngle1) * Math.sin(randomAngle2));
 			const posY = ((p5.height / 2) / mergedProps.pixelsPerMeter)
-                + (mergedProps.spawnAreaRadius * Math.sin(randomAngle1) * Math.sin(randomAngle2));
+				+ (mergedProps.spawnAreaRadius * Math.sin(randomAngle1) * Math.sin(randomAngle2));
 			particles.push(new Particle(p5, posX, posY));
 		}
 	};
