@@ -44,6 +44,14 @@ class Particle {
 		this.color = Particle.initColor;
 	}
 
+	attract(p5: p5Types, attractorPosition: p5Types.Vector, G: number, attractorMass: number) {
+		const distance = attractorPosition.dist(this.position);
+		const direction = attractorPosition.copy().sub(this.position).normalize();
+		const forceMag = (G * Particle.mass * attractorMass) / ((distance ** 2) + Particle.softening);
+		const force = direction.mult(forceMag);
+		this.sumForces.add(force);
+	}
+
 	updateForces(p5: p5Types, particles: Particle[], deltaTime: number, G: number) {
 		// Calculate force
 		const force = p5.createVector(0, 0);
@@ -69,6 +77,7 @@ class Particle {
 		// Update position and velocity
 		this.position.add(this.velocity.copy().mult(deltaTime)).add(acceleration.copy().mult(deltaTime * deltaTime / 2));
 		this.velocity.add(acceleration.copy().mult(deltaTime));
+		this.velocity.mult(Particle.friction);
 	}
 
 	moveObjectOutOfScreen(p5: p5Types, pixelPerMeter: number) {

@@ -18,6 +18,7 @@ type ComponentProps = {
 	particlesMass?: number;
 	softening?: number;
 	friction?: number;
+	centerAttractorMass?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
@@ -26,23 +27,24 @@ type ComponentProps = {
 };
 
 const defaultProps = {
-	nbodyCountMobile: 2,
-	nbodyCountComputer: 2,
+	nbodyCountMobile: NBODY_COUNT_MOBILE,
+	nbodyCountComputer: NBODY_COUNT_COMPUTER,
 	frameRate: 60,
 	fixedUpdate: 60,
 	spawnAreaRadius: 3,
 	gravitationalConstant: 1,
 	particlesMass: 50,
-	softening: 1,
-	friction: 1,
+	softening: 5,
+	friction: 0.99,
+	centerAttractorMass: 500,
 	pixelsPerMeter: 100,
 	initColor: [0, 255, 255, 200],
 	finalColor: [255, 0, 255, 200],
-	maxForceMagColor: 5,
+	maxForceMagColor: 10,
 	backColor: [0, 0, 0, 255],
 };
 
-const ParticleSimulator = (props: ComponentProps) => {
+const NbodySimulator = (props: ComponentProps) => {
 	const mergedProps = {...defaultProps, ...props};
 
 	// Time variables
@@ -56,6 +58,10 @@ const ParticleSimulator = (props: ComponentProps) => {
 	// Simulation variables
 	const particles: Particle[] = [];
 
+	// Attractor center
+	let attractorPosition: p5Types.Vector;
+	let attractorScreenPosition: p5Types.Vector;
+
 	// Sketch setup
 	const setup = (p5: p5Types, canvasParentRef: Element) => {
 		// Create canvas
@@ -67,6 +73,11 @@ const ParticleSimulator = (props: ComponentProps) => {
 
 		// Set frame rate to 60
 		p5.frameRate(mergedProps.frameRate);
+
+		// Create attractor
+		attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
+		attractorScreenPosition = p5.createVector(
+			attractorPosition.x * mergedProps.pixelsPerMeter, attractorPosition.y * mergedProps.pixelsPerMeter);
 
 		// Create particles
 		Particle.setMass(mergedProps.particlesMass);
@@ -105,12 +116,13 @@ const ParticleSimulator = (props: ComponentProps) => {
 			// Update particles acceleration
 			for (const particle of particles) {
 				particle.updateForces(p5, particles, fixedDeltaTime, mergedProps.gravitationalConstant);
+				particle.attract(p5, attractorPosition, mergedProps.gravitationalConstant, mergedProps.centerAttractorMass);
 			}
 
 			// Update particles velocity and position
 			for (const particle of particles) {
 				particle.updateVelocityAndPosition(p5, fixedDeltaTime);
-				particle.moveObjectOutOfScreen(p5, mergedProps.pixelsPerMeter);
+				// particle.moveObjectOutOfScreen(p5, mergedProps.pixelsPerMeter);
 			}
 		}
 
@@ -122,6 +134,10 @@ const ParticleSimulator = (props: ComponentProps) => {
 		for (const particle of particles) {
 			particle.show(screenBuffer, mergedProps.pixelsPerMeter);
 		}
+
+		// Draw attractor
+		screenBuffer.fill(255, 0, 0);
+		screenBuffer.circle(attractorScreenPosition.x, attractorScreenPosition.y, 10);
 
 		// Swap buffers
 		p5.image(screenBuffer, 0, 0);
@@ -138,4 +154,4 @@ const ParticleSimulator = (props: ComponentProps) => {
 	);
 };
 
-export default ParticleSimulator;
+export default NbodySimulator;
