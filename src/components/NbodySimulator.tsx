@@ -76,7 +76,8 @@ const NbodySimulator = (props: ComponentProps) => {
 
 		// Create attractor
 		attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
-		attractorScreenPosition = p5.createVector(attractorPosition.x * mergedProps.pixelsPerMeter, attractorPosition.y * mergedProps.pixelsPerMeter);
+		attractorScreenPosition = p5.createVector(
+			attractorPosition.x * mergedProps.pixelsPerMeter, attractorPosition.y * mergedProps.pixelsPerMeter);
 
 		// Create particles
 		Particle.setMass(mergedProps.particlesMass);
