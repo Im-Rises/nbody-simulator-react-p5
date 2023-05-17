@@ -3,26 +3,26 @@
   "description": "A react component that simulates the n-body problem using p5.js",
   "homepage": "https://im-rises.github.io/nbody-simulator-react-p5/",
   "repository": "https://github.com/Im-Rises/nbody-simulator-react-p5",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "dist/Components/NbodySimulator.js",
+  "main": "dist/components/NbodySimulator.js",
   "files": [
     "LICENSE",
     "README.md",
     "package.json",
-    "dist/Components/NbodySimulator.js",
-    "dist/Components/NbodySimulator.d.ts",
-    "dist/Components/NbodySimulator.d.ts.map",
-    "dist/Classes/Particle.js",
-    "dist/Classes/Particle.d.ts",
-    "dist/Classes/Particle.d.ts.map",
-    "dist/Constants/constant-nbody-simulator.js",
-    "dist/Constants/constant-nbody-simulator.d.ts",
-    "dist/Constants/constant-nbody-simulator.d.ts.map"
+    "dist/components/NbodySimulator.js",
+    "dist/components/NbodySimulator.d.ts",
+    "dist/components/NbodySimulator.d.ts.map",
+    "dist/classes/Particle.js",
+    "dist/classes/Particle.d.ts",
+    "dist/classes/Particle.d.ts.map",
+    "dist/constants/constant-nbody-simulator.js",
+    "dist/constants/constant-nbody-simulator.d.ts",
+    "dist/constants/constant-nbody-simulator.d.ts.map"
   ],
   "keywords": [
     "react",
