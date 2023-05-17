@@ -150,7 +150,9 @@ const NbodySimulator = (props: ComponentProps) => {
 	};
 
 	return (
-		<Sketch setup={setup} draw={draw} windowResized={windowResized}/>
+		<div style={{width: '100%', height: '100%', overflow: 'hidden'}}>
+			<Sketch setup={setup} draw={draw} windowResized={windowResized}/>
+		</div>
 	);
 };
 
