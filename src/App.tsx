@@ -19,6 +19,7 @@ const App: React.FC = () => {
 					<div className={'particle-sim-canvas'}>
 						<NbodySimulator
 							parentRef={divRef}
+							// nbodyCountComputer={1000}
 							// initColor={[0xFF, 0x4C, 0x19, 0x80]}
 							// finalColor={[0xFF, 0xFF, 0xFF, 0xFF]}
 						/>
