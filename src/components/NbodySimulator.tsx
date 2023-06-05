@@ -34,7 +34,7 @@ const defaultProps = {
 	spawnAreaRadius: 3,
 	gravitationalConstant: 1,
 	particlesMass: 50,
-	softening: 5,
+	softening: 1,
 	friction: 0.99,
 	centerAttractorMass: 500,
 	pixelsPerMeter: 100,
@@ -58,9 +58,9 @@ const NbodySimulator = (props: ComponentProps) => {
 	// Simulation variables
 	const particles: Particle[] = [];
 
-	// Attractor center
-	let attractorPosition: p5Types.Vector;
-	let attractorScreenPosition: p5Types.Vector;
+	// // Attractor center
+	// let attractorPosition: p5Types.Vector;
+	// let attractorScreenPosition: p5Types.Vector;
 
 	const forceDivCanvasHolderAndCanvasStyle = (canvas: p5Types.Element, canvasParentRef: Element) => {
 		// Set up canvas holder styles manually
@@ -84,10 +84,10 @@ const NbodySimulator = (props: ComponentProps) => {
 		// Set frame rate to 60
 		p5.frameRate(mergedProps.frameRate);
 
-		// Create attractor
-		attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
-		attractorScreenPosition = p5.createVector(
-			attractorPosition.x * mergedProps.pixelsPerMeter, attractorPosition.y * mergedProps.pixelsPerMeter);
+		// // Create attractor
+		// attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
+		// attractorScreenPosition = p5.createVector(
+		// 	attractorPosition.x * mergedProps.pixelsPerMeter, attractorPosition.y * mergedProps.pixelsPerMeter);
 
 		// Create particles
 		Particle.setMass(mergedProps.particlesMass);
@@ -104,9 +104,9 @@ const NbodySimulator = (props: ComponentProps) => {
 			const randomAngle1 = randomFloat(0, 2 * Math.PI);
 			const randomAngle2 = randomFloat(0, 2 * Math.PI);
 			const posX = ((p5.width / 2) / mergedProps.pixelsPerMeter)
-				+ (mergedProps.spawnAreaRadius * Math.cos(randomAngle1) * Math.sin(randomAngle2));
+                + (mergedProps.spawnAreaRadius * Math.cos(randomAngle1) * Math.sin(randomAngle2));
 			const posY = ((p5.height / 2) / mergedProps.pixelsPerMeter)
-				+ (mergedProps.spawnAreaRadius * Math.sin(randomAngle1) * Math.sin(randomAngle2));
+                + (mergedProps.spawnAreaRadius * Math.sin(randomAngle1) * Math.sin(randomAngle2));
 			particles.push(new Particle(p5, posX, posY));
 		}
 	};
@@ -123,16 +123,14 @@ const NbodySimulator = (props: ComponentProps) => {
 		if (fixedUpdateAccum >= fixedDeltaTime) {
 			fixedUpdateAccum = 0;
 
-			// Update particles acceleration
+			// Calculate forces applied to particles
 			for (const particle of particles) {
-				particle.updateForces(p5, particles, fixedDeltaTime, mergedProps.gravitationalConstant);
-				particle.attract(p5, attractorPosition, mergedProps.gravitationalConstant, mergedProps.centerAttractorMass);
+				particle.updateForces(p5, particles, mergedProps.gravitationalConstant);
 			}
 
 			// Update particles velocity and position
 			for (const particle of particles) {
-				particle.updateVelocityAndPosition(p5, fixedDeltaTime);
-				// particle.moveObjectOutOfScreen(p5, mergedProps.pixelsPerMeter);
+				particle.updatePhysic(p5, fixedDeltaTime);
 			}
 		}
 
@@ -147,7 +145,7 @@ const NbodySimulator = (props: ComponentProps) => {
 
 		// Draw attractor
 		screenBuffer.fill(255, 0, 0);
-		screenBuffer.circle(attractorScreenPosition.x, attractorScreenPosition.y, 10);
+		// screenBuffer.circle(attractorScreenPosition.x, attractorScreenPosition.y, 10);
 
 		// Swap buffers
 		p5.image(screenBuffer, 0, 0);
