@@ -33,9 +33,11 @@ It works on desktop and mobile as well with different controls (check the `contr
 
 ## Screenshots
 
-|                                                      Attraction                                                       |                                                         Drag                                                          |                                                       Repulsion                                                       |
-|:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
-| ![screenshot1](https://user-images.githubusercontent.com/59691442/230525907-1efd6bc5-ce33-485a-879a-57a8ed46c596.png) | ![screenshot2](https://user-images.githubusercontent.com/59691442/230525910-7a41907f-d6fe-4ed2-8c44-94c09b837e6f.png) | ![screenshot3](https://user-images.githubusercontent.com/59691442/230525912-bb0054c4-0f0c-4f6e-b7c9-937f11ba0acf.png) |
+[//]: # (|                                                      Attraction                                                       |                                                         Drag                                                          |                                                       Repulsion                                                       |)
+
+[//]: # (|:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|)
+
+[//]: # (| ![screenshot1]&#40;https://user-images.githubusercontent.com/59691442/230525907-1efd6bc5-ce33-485a-879a-57a8ed46c596.png&#41; | ![screenshot2]&#40;https://user-images.githubusercontent.com/59691442/230525910-7a41907f-d6fe-4ed2-8c44-94c09b837e6f.png&#41; | ![screenshot3]&#40;https://user-images.githubusercontent.com/59691442/230525912-bb0054c4-0f0c-4f6e-b7c9-937f11ba0acf.png&#41; |)
 
 ## Demo video
 
@@ -43,14 +45,17 @@ It works on desktop and mobile as well with different controls (check the `contr
 
 [//]: # (https://user-images.githubusercontent.com/59691442/230523799-9afbf327-3cf4-4530-8127-594339d94334.mp4)
 
-https://user-images.githubusercontent.com/59691442/230526870-cd104007-be41-4cdd-a10e-4672da650974.mp4
+[//]: # (https://user-images.githubusercontent.com/59691442/230526870-cd104007-be41-4cdd-a10e-4672da650974.mp4)
 
 ## Controls
 
-The particles are initially attracted to the mouse, but you can toggle attract/repel by clicking with the mouse
-button on a screen.  
-On tablet and mobile de the touch screen to move the particles by dragging your finger. To toggle
-attract/repel tap on the screen.
+[//]: # (The particles are initially attracted to the mouse, but you can toggle attract/repel by clicking with the mouse)
+
+[//]: # (button on a screen.  )
+
+[//]: # (On tablet and mobile de the touch screen to move the particles by dragging your finger. To toggle)
+
+[//]: # (attract/repel tap on the screen.)
 
 You can also toggle fullscreen mode by pressing the `F11` key.
 
@@ -182,7 +187,6 @@ repository [here](https://im-rises.github.io/nbody-simulator-react-p5-website).
 > **Note**  
 > Be sure to do like in the example, the parent div of the canvas must be set before the p5 canvas is created.
 
-<!--
 ## Calculations
 
 The calculations are made with the [Newtonian mechanics](https://en.wikipedia.org/wiki/Newtonian_mechanics) equations.
@@ -191,10 +195,6 @@ $$ F = G \frac{m_1 m_2}{r^2} $$
 
 To prevent to have a division by zero when the particles are too close to each other, we add a softening parameter
 $\epsilon$.
-The implementation is not made to be physically accurate, but to be visually appealing. By adding the offset $\epsilon$
-directly like below, the particles will come from a far distance faster than they should.
-
-$$ F = G \frac{m_1 m_2}{r^2 + \epsilon} $$
 
 One of the real force calculation with softening could be like this:
 
@@ -202,7 +202,6 @@ $$ F = G \frac{m_1 m_2}{(r^2 + \epsilon^2)^\frac{3}{2}} $$
 
 Where G is the gravitational constant, m1 and m2 are the masses of the particles, r is the distance between the
 particles and d is the softening parameter.
--->
 
 ## Known issues
 
@@ -281,6 +280,9 @@ P5.js:
 
 P5.js React:  
 <https://www.npmjs.com/package/react-p5>
+
+Wikipedia Barnes-Hut simulation:  
+<https://en.wikipedia.org/wiki/Barnes–Hut_simulation>
 
 ## Links
 

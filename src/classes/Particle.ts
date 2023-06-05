@@ -44,33 +44,23 @@ class Particle {
 		this.color = Particle.initColor;
 	}
 
-	attract(p5: p5Types, attractorPosition: p5Types.Vector, G: number, attractorMass: number) {
-		const distance = attractorPosition.dist(this.position);
-		const direction = attractorPosition.copy().sub(this.position).normalize();
-		const forceMag = (G * Particle.mass * attractorMass) / ((distance ** 2) + Particle.softening);
-		const force = direction.mult(forceMag);
-		this.sumForces.add(force);
+	attract(p5: p5Types, otherParticle: Particle, G: number) {
+		const distance = this.position.dist(otherParticle.position);
+		const direction = (otherParticle.position.copy().sub(this.position)).normalize();
+		const forceMag = (G * Particle.mass * Particle.mass) / (((distance ** 2) + (Particle.softening ** 2)) ** (3 / 2));
+		this.sumForces.add(direction.mult(forceMag));
 	}
 
-	updateForces(p5: p5Types, particles: Particle[], deltaTime: number, G: number) {
-		// Calculate force
-		const force = p5.createVector(0, 0);
+	updateForces(p5: p5Types, particles: Particle[], G: number) {
+		// Calculate sum of forces
 		for (const particle of particles) {
 			if (particle !== this) {
-				const distance = this.position.dist(particle.position);
-				const direction = particle.position.copy().sub(this.position).normalize();
-				const forceMag = (G * Particle.mass * Particle.mass) / ((distance ** 2) + Particle.softening);
-				force.add(direction.mult(forceMag));
+				this.attract(p5, particle, G);
 			}
 		}
-
-		this.sumForces = force;
-
-		// Update color
-		this.color = p5.lerpColor(Particle.initColor, Particle.finalColor, this.velocity.mag() / Particle.maxForceMagColor);
 	}
 
-	updateVelocityAndPosition(p5: p5Types, deltaTime: number) {
+	updatePhysic(p5: p5Types, deltaTime: number) {
 		// Calculate acceleration
 		const acceleration = this.sumForces.copy().div(Particle.mass);
 
@@ -78,31 +68,21 @@ class Particle {
 		this.position.add(this.velocity.copy().mult(deltaTime)).add(acceleration.copy().mult(deltaTime * deltaTime / 2));
 		this.velocity.add(acceleration.copy().mult(deltaTime));
 		this.velocity.mult(Particle.friction);
-	}
 
-	moveObjectOutOfScreen(p5: p5Types, pixelPerMeter: number) {
-		/* Prevent particles from going out of the screen */
-		if (this.position.x < 0) {
-			this.position.x = p5.width / pixelPerMeter;
-		}
-
-		if (this.position.x > p5.width / pixelPerMeter) {
-			this.position.x = 0;
-		}
-
-		if (this.position.y < 0) {
-			this.position.y = p5.height / pixelPerMeter;
-		}
-
-		if (this.position.y > p5.height / pixelPerMeter) {
-			this.position.y = 0;
-		}
+		// Reset sum of forces
+		this.sumForces = p5.createVector(0, 0);
 	}
 
 	show(p5: p5Types, pixelPerMeter: number) {
+		// Update color
+		this.color = p5.lerpColor(Particle.initColor, Particle.finalColor, this.velocity.mag() / Particle.maxForceMagColor);
+
+		// Convert position to screen
+		const positionScreen = this.position.copy().mult(pixelPerMeter);
+
+		// Draw particle
 		p5.stroke(this.color);
 		p5.strokeWeight(15);
-		const positionScreen = this.position.copy().mult(pixelPerMeter);
 		p5.point(positionScreen.x, positionScreen.y);
 	}
 }
