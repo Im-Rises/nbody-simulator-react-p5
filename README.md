@@ -282,6 +282,9 @@ P5.js:
 P5.js React:  
 <https://www.npmjs.com/package/react-p5>
 
+Wikipedia Barnes-Hut simulation:  
+<https://en.wikipedia.org/wiki/Barnes–Hut_simulation>
+
 ## Links
 
 Check the source code
