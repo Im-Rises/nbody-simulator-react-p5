@@ -44,10 +44,17 @@ class Particle {
 		this.color = Particle.initColor;
 	}
 
-	attract(p5: p5Types, otherParticle: Particle, G: number) {
+	updateForce(p5: p5Types, otherParticle: Particle, G: number) {
 		const distance = this.position.dist(otherParticle.position);
 		const direction = (otherParticle.position.copy().sub(this.position)).normalize();
 		const forceMag = (G * Particle.mass * Particle.mass) / (((distance ** 2) + (Particle.softening ** 2)) ** (3 / 2));
+		this.sumForces.add(direction.mult(forceMag));
+	}
+
+	updateForceWithValue(p5: p5Types, particlePosition: p5Types.Vector, particleMass: number, G: number) {
+		const distance = this.position.dist(particlePosition);
+		const direction = (particlePosition.copy().sub(this.position)).normalize();
+		const forceMag = (G * Particle.mass * particleMass) / (((distance ** 2) + (Particle.softening ** 2)) ** (3 / 2));
 		this.sumForces.add(direction.mult(forceMag));
 	}
 
@@ -55,7 +62,7 @@ class Particle {
 		// Calculate sum of forces
 		for (const particle of particles) {
 			if (particle !== this) {
-				this.attract(p5, particle, G);
+				this.updateForce(p5, particle, G);
 			}
 		}
 	}

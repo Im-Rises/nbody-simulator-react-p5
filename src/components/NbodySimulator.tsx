@@ -21,7 +21,7 @@ type ComponentProps = {
 	particlesMass?: number;
 	softening?: number;
 	friction?: number;
-	// centerAttractorMass?: number;
+	centerAttractorMass?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
@@ -42,7 +42,7 @@ const defaultProps = {
 	particlesMass: 400,
 	softening: 5,
 	friction: 0.99,
-	// centerAttractorMass: 500,
+	centerAttractorMass: 1000,
 	pixelsPerMeter: 100,
 	initColor: [0, 255, 255, 200],
 	finalColor: [255, 0, 255, 200],
@@ -64,9 +64,8 @@ const NbodySimulator = (props: ComponentProps) => {
 	// Simulation variables
 	const particles: Particle[] = [];
 
-	// // Attractor center
-	// let attractorPosition: p5Types.Vector;
-	// let attractorScreenPosition: p5Types.Vector;
+	// Attractor center
+	let attractorPosition: p5Types.Vector;
 
 	const forceDivCanvasHolderAndCanvasStyle = (canvas: p5Types.Element, canvasParentRef: Element) => {
 		// Set up canvas holder styles manually
@@ -90,10 +89,8 @@ const NbodySimulator = (props: ComponentProps) => {
 		// Set frame rate to 60
 		p5.frameRate(mergedProps.frameRate);
 
-		// // Create attractor
-		// attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
-		// attractorScreenPosition = p5.createVector(
-		// 	attractorPosition.x * mergedProps.pixelsPerMeter, attractorPosition.y * mergedProps.pixelsPerMeter);
+		// Create attractor
+		attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
 
 		// Create particles
 		Particle.setMass(mergedProps.particlesMass);
@@ -130,6 +127,7 @@ const NbodySimulator = (props: ComponentProps) => {
 			// Calculate forces applied to particles
 			for (const particle of particles) {
 				particle.updateForces(p5, particles, mergedProps.gravitationalConstant);
+				particle.updateForceWithValue(p5, attractorPosition, mergedProps.centerAttractorMass, mergedProps.gravitationalConstant);
 			}
 
 			// Update particles velocity and position
@@ -149,7 +147,6 @@ const NbodySimulator = (props: ComponentProps) => {
 
 		// Draw attractor
 		screenBuffer.fill(255, 0, 0);
-		// screenBuffer.circle(attractorScreenPosition.x, attractorScreenPosition.y, 10);
 
 		// Swap buffers
 		p5.image(screenBuffer, 0, 0);
