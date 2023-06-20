@@ -37,9 +37,9 @@ class Particle {
 	sumForces: p5Types.Vector;
 	color: p5Types.Color;
 
-	constructor(p5: p5Types, x: number, y: number) {
+	constructor(p5: p5Types, x: number, y: number, vx: number, vy: number) {
 		this.position = p5.createVector(x, y);
-		this.velocity = p5.createVector(0, 0);
+		this.velocity = p5.createVector(vx, vy);
 		this.sumForces = p5.createVector(0, 0);
 		this.color = Particle.initColor;
 	}

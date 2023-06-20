@@ -13,12 +13,15 @@ type ComponentProps = {
 	nbodyCountComputer?: number;
 	frameRate?: number;
 	fixedUpdate?: number;
-	spawnAreaRadius?: number;
+	minSpawnRadius?: number;
+	maxSpawnRadius?: number;
+	minSpawnVelocity?: number;
+	maxSpawnVelocity?: number;
 	gravitationalConstant?: number;
 	particlesMass?: number;
 	softening?: number;
 	friction?: number;
-	centerAttractorMass?: number;
+	// centerAttractorMass?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
@@ -31,12 +34,15 @@ const defaultProps = {
 	nbodyCountComputer: NBODY_COUNT_COMPUTER,
 	frameRate: 60,
 	fixedUpdate: 60,
-	spawnAreaRadius: 3,
+	minSpawnRadius: 2,
+	maxSpawnRadius: 3,
+	minSpawnVelocity: 5,
+	maxSpawnVelocity: 10,
 	gravitationalConstant: 1,
-	particlesMass: 50,
-	softening: 1,
+	particlesMass: 400,
+	softening: 5,
 	friction: 0.99,
-	centerAttractorMass: 500,
+	// centerAttractorMass: 500,
 	pixelsPerMeter: 100,
 	initColor: [0, 255, 255, 200],
 	finalColor: [255, 0, 255, 200],
@@ -98,16 +104,14 @@ const NbodySimulator = (props: ComponentProps) => {
 			mergedProps.initColor[0], mergedProps.initColor[1], mergedProps.initColor[2], mergedProps.initColor[3]));
 		Particle.setFinalColor(p5.color(
 			mergedProps.finalColor[0], mergedProps.finalColor[1], mergedProps.finalColor[2], mergedProps.finalColor[3]));
+		const posCentered = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
 		for (let i = 0; i < (isMobile ? mergedProps.nbodyCountMobile : mergedProps.nbodyCountComputer); i++) {
 			// Define particles spawn in a circle
 			const randomFloat = (min: number, max: number) => min + ((max - min) * Math.random());
-			const randomAngle1 = randomFloat(0, 2 * Math.PI);
-			const randomAngle2 = randomFloat(0, 2 * Math.PI);
-			const posX = ((p5.width / 2) / mergedProps.pixelsPerMeter)
-                + (mergedProps.spawnAreaRadius * Math.cos(randomAngle1) * Math.sin(randomAngle2));
-			const posY = ((p5.height / 2) / mergedProps.pixelsPerMeter)
-                + (mergedProps.spawnAreaRadius * Math.sin(randomAngle1) * Math.sin(randomAngle2));
-			particles.push(new Particle(p5, posX, posY));
+			const pos = (p5.createVector(randomFloat(-1, 1), randomFloat(-1, 1))
+				.setMag(randomFloat(mergedProps.minSpawnRadius, mergedProps.maxSpawnRadius)));
+			const vel = pos.copy().rotate(Math.PI / 2).setMag(randomFloat(mergedProps.minSpawnVelocity, mergedProps.maxSpawnVelocity));
+			particles.push(new Particle(p5, posCentered.x + pos.x, posCentered.y + pos.y, vel.x, vel.y));
 		}
 	};
 
