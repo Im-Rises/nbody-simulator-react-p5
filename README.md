@@ -1,11 +1,3 @@
-[//]: # (- [ ] Do a base form of donut/torus with particles oriented to go in the same direction according to the center &#40;rotate)
-
-[//]: # (  position by 90°&#41;)
-
-[//]: # (- [ ] Add a quadree to reduce the number of calculation &#40;Barnes-Hut algorithm&#41;)
-
-[//]: # (- [ ] Add a parameter to display the barnes-hut quadree or not)
-
 # nbody-simulator-react-p5
 
 <p align="center">
@@ -19,7 +11,7 @@
 
 ## Description
 
-This is a nbody simulator package made with React Typescript and p5.js.
+This is a n-body simulator package made with React Typescript and p5.js.
 
 ## 🚀🚀[You can try it online from your browser](https://im-rises.github.io/particle-simulator-react-p5-website/) 🚀🚀
 
@@ -33,37 +25,27 @@ It works on desktop and mobile as well with different controls (check the `contr
 
 ## Screenshots
 
-[//]: # (|                                                      Attraction                                                       |                                                         Drag                                                          |                                                       Repulsion                                                       |)
-
-[//]: # (|:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|)
-
-[//]: # (| ![screenshot1]&#40;https://user-images.githubusercontent.com/59691442/230525907-1efd6bc5-ce33-485a-879a-57a8ed46c596.png&#41; | ![screenshot2]&#40;https://user-images.githubusercontent.com/59691442/230525910-7a41907f-d6fe-4ed2-8c44-94c09b837e6f.png&#41; | ![screenshot3]&#40;https://user-images.githubusercontent.com/59691442/230525912-bb0054c4-0f0c-4f6e-b7c9-937f11ba0acf.png&#41; |)
+| Screenshot 1                                                                                                              | Screenshot 2                                                                                                              | 
+|---------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| ![Screenshot1](https://github.com/Im-Rises/nbody-simulator-react-p5/assets/59691442/59dbae4f-bfe8-4923-ad06-cc6abf07db13) | ![Screenshot2](https://github.com/Im-Rises/nbody-simulator-react-p5/assets/59691442/ec62857c-fb48-4049-8a8c-32a0ccc5fa91) |
 
 ## Demo video
 
-[//]: # (https://user-images.githubusercontent.com/59691442/219550627-16660c09-dbea-41f3-ba15-3d7aaafca6d9.mp4)
-
-[//]: # (https://user-images.githubusercontent.com/59691442/230523799-9afbf327-3cf4-4530-8127-594339d94334.mp4)
-
-[//]: # (https://user-images.githubusercontent.com/59691442/230526870-cd104007-be41-4cdd-a10e-4672da650974.mp4)
-
-## Controls
-
-[//]: # (The particles are initially attracted to the mouse, but you can toggle attract/repel by clicking with the mouse)
-
-[//]: # (button on a screen.  )
-
-[//]: # (On tablet and mobile de the touch screen to move the particles by dragging your finger. To toggle)
-
-[//]: # (attract/repel tap on the screen.)
-
-You can also toggle fullscreen mode by pressing the `F11` key.
+https://github.com/Im-Rises/nbody-simulator-react-p5/assets/59691442/20bc593e-7bd0-4d60-9470-a8caed1a45bd
 
 ## Package installation
 
-To install it type `npm install nbody-simulator-react-p5` in your terminal to install it.
+To install it type the following command in your terminal:
 
-Then you can import it in your project with `import NbodySimulator from 'nbody-simulator-react-p5'`.
+```bash
+npm install nbody-simulator-react-p5
+```
+
+Then you can import it in your project with:
+
+```bash
+import NbodySimulator from 'nbody-simulator-react-p5'
+```
 
 ## Usage
 
@@ -128,20 +110,23 @@ const App: React.FC = () => {
                     <div className={'nbody-sim-canvas'}>
                         <NbodySimulator
                             parentRef={divRef}
-                            particleCountMobile={1000}
-                            particleCountComputer={3000}
-                            fixedUpdate={60}
+                            nbodyCountMobile={100}
+                            nbodyCountComputer={50}
                             frameRate={60}
-                            spawnAreaRadius={2}
+                            fixedUpdate={60}
+                            minSpawnRadius={3}
+                            maxSpawnRadius={4}
+                            minSpawnVelocity={5}
+                            maxSpawnVelocity={10}
                             gravitationalConstant={1}
-                            particlesMass={50}
-                            attractorMass={250}
+                            particlesMass={400}
+                            softening={4}
                             friction={0.99}
-                            softening={10}
+                            centerAttractorMass={1000}
                             pixelsPerMeter={100}
                             initColor={[0, 255, 255, 200]}
                             finalColor={[255, 0, 255, 200]}
-                            maxColorVelocity={5}
+                            maxForceMagColor={30}
                             backColor={[0, 0, 0, 255]}
                         />
                     </div>
@@ -163,7 +148,10 @@ The component takes 1 to 16 props:
 - `particleCountComputer` - the number of particles on desktop devices.
 - `fixedUpdate` - the number of fixed updates per second.
 - `frameRate` - the number of frames per second.
-- `spawnAreaRadius` - the radius of the spawn area of the particles (in meters).
+- `minSpawnRadius` - the minimum radius of the particles when they are spawned.
+- `maxSpawnRadius` - the maximum radius of the particles when they are spawned.
+- `minSpawnVelocity` - the minimum velocity of the particles when they are spawned.
+- `maxSpawnVelocity` - the maximum velocity of the particles when they are spawned.
 - `gravitationalConstant` - the gravitational constant of the simulation.
 - `particlesMass` - the mass of the particles.
 - `attractorMass` - the mass of the attractor.
@@ -172,7 +160,7 @@ The component takes 1 to 16 props:
 - `pixelsPerMeter` - the number of pixels to represent 1 meter.
 - `initColor` - the initial color of the particles (in RGB).
 - `finalColor` - the final color of the particles (in RGB).
-- `maxColorVelocity` - the maximum velocity of the particles at which the color will be the final color.
+- `maxVelocityMagColor` - the maximum velocity of the particles at which the color will be the final color.
 - `backColor` - the background color of the canvas (in RGB).
 
 This will create a canvas with 3000 particles on desktop and 1000 on mobile in fullscreen which will be resized

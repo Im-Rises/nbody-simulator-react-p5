@@ -3,7 +3,7 @@
   "description": "A react component that simulates the n-body problem using p5.js",
   "homepage": "https://im-rises.github.io/nbody-simulator-react-p5/",
   "repository": "https://github.com/Im-Rises/nbody-simulator-react-p5",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": false,
   "license": "MIT",
   "publishConfig": {
