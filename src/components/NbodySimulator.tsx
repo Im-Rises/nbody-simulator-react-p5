@@ -25,7 +25,7 @@ type ComponentProps = {
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
-	maxForceMagColor?: number;
+	maxVelocityMagColor?: number;
 	backColor?: Quadruplet;
 };
 
@@ -46,7 +46,7 @@ const defaultProps = {
 	pixelsPerMeter: 100,
 	initColor: [0, 255, 255, 200],
 	finalColor: [255, 0, 255, 200],
-	maxForceMagColor: 10,
+	maxVelocityMagColor: 30,
 	backColor: [0, 0, 0, 255],
 };
 
@@ -94,7 +94,7 @@ const NbodySimulator = (props: ComponentProps) => {
 
 		// Create particles
 		Particle.setMass(mergedProps.particlesMass);
-		Particle.setMaxForceMagColor(mergedProps.maxForceMagColor);
+		Particle.setMaxForceMagColor(mergedProps.maxVelocityMagColor);
 		Particle.setSoftening(mergedProps.softening);
 		Particle.setFriction(mergedProps.friction);
 		Particle.setInitialColor(p5.color(
