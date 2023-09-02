@@ -1,35 +1,37 @@
 import React, {useEffect, useState} from 'react';
-import NbodySimulator from './components/NbodySimulator';
+// import NbodySimulator from './components/NbodySimulator';
+import NbodySimulatorBarnesHut from "./components/NbodySimulatorBarnesHut";
 import './App.scss';
 
 const App: React.FC = () => {
-	const [isLoaded, setIsLoaded] = useState(false);
-	const divRef = React.useRef<HTMLDivElement>(null);
+    // const [isLoaded, setIsLoaded] = useState(false);
+    const divRef = React.useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (divRef.current) {
-			setIsLoaded(true);
-		}
-	}, [divRef]);
+    useEffect(() => {
+        if (divRef.current) {
+            setIsLoaded(true);
+        }
+    }, [divRef]);
 
-	return (
-		<div className='App'>
-			<div ref={divRef}>
-				{isLoaded ? (
-					<div className={'particle-sim-canvas'}>
-						<NbodySimulator
-							parentRef={divRef}
-							// nbodyCountComputer={1000}
-							// initColor={[0xFF, 0x4C, 0x19, 0x80]}
-							// finalColor={[0xFF, 0xFF, 0xFF, 0xFF]}
-						/>
-					</div>
-				) : (
-					<p className={'wait-sim-canvas'}>Loading...</p>
-				)}
-			</div>
-		</div>
-	);
+    return (
+        <div className='App'>
+            {/*<div ref={divRef}>*/}
+            {/*	{isLoaded ? (*/}
+            {/*		<div className={'particle-sim-canvas'}>*/}
+            {/*			<NbodySimulator*/}
+            {/*				parentRef={divRef}*/}
+            {/*				// nbodyCountComputer={1000}*/}
+            {/*				// initColor={[0xFF, 0x4C, 0x19, 0x80]}*/}
+            {/*				// finalColor={[0xFF, 0xFF, 0xFF, 0xFF]}*/}
+            {/*			/>*/}
+            {/*		</div>*/}
+            {/*	) : (*/}
+            {/*		<p className={'wait-sim-canvas'}>Loading...</p>*/}
+            {/*	)}*/}
+            {/*</div>*/}
+            <NbodySimulatorBarnesHut/>
+        </div>
+    );
 };
 
 export default App;
