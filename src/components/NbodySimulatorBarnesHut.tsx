@@ -19,7 +19,7 @@ const NbodySimulatorBarnesHut = (props: Props) => {
     const points = [];
     for (let i = 0; i < mergedProps.particlesCount; i++) {
         points.push(new Point(Math.random() * widthHeight, Math.random() * widthHeight));
-        quadtree.insert(points[i]);
+        console.log(quadtree.insert(points[i]));
     }
 
     console.log(quadtree);

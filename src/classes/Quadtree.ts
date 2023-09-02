@@ -56,26 +56,45 @@ class Quadtree {
 
     insert(point: Point) {
         if (!this.boundary.contains(point)) {
-            return;
+            return false;
         }
         if (this.points.length < this.capacity) {
             this.points.push(point);
+            return true;
         } else {
             if (!this.divided) {
                 this.subdivide();
+                // Move points in current quad to the new quads
+                for (const p of this.points) {
+                    if (this.northWest.insert(p)) {
+                        continue;
+                    }
+                    if (this.northEast.insert(p)) {
+                        continue;
+                    }
+                    if (this.southWest.insert(p)) {
+                        continue;
+                    }
+                    if (this.southEast.insert(p)) {
+                        continue;
+                    }
+                }
             }
+
             if (this.northWest.boundary.contains(point)) {
-                this.northWest.insert(point);
+                return this.northWest.insert(point);
             }
             if (this.northEast.boundary.contains(point)) {
-                this.northEast.insert(point);
+                return this.northEast.insert(point);
             }
             if (this.southWest.boundary.contains(point)) {
-                this.southWest.insert(point);
+                return this.southWest.insert(point);
             }
             if (this.southEast.boundary.contains(point)) {
-                this.southEast.insert(point);
+                return this.southEast.insert(point);
             }
+
+            return false;
         }
 
     }
@@ -85,10 +104,10 @@ class Quadtree {
         const y = this.boundary.y;
         const w = this.boundary.w;
         const h = this.boundary.h;
-
-        this.northWest = new Quadtree(new Rectangle(x - w / 2, y - h / 2, w / 2, h / 2), this.capacity);
-        this.northEast = new Quadtree(new Rectangle(x + w / 2, y - h / 2, w / 2, h / 2), this.capacity);
-        this.southWest = new Quadtree(new Rectangle(x - w / 2, y + h / 2, w / 2, h / 2), this.capacity);
+        
+        this.northWest = new Quadtree(new Rectangle(x, y, w / 2, h / 2), this.capacity);
+        this.northEast = new Quadtree(new Rectangle(x + w / 2, y, w / 2, h / 2), this.capacity);
+        this.southWest = new Quadtree(new Rectangle(x, y + h / 2, w / 2, h / 2), this.capacity);
         this.southEast = new Quadtree(new Rectangle(x + w / 2, y + h / 2, w / 2, h / 2), this.capacity);
 
         this.divided = true;
@@ -97,8 +116,8 @@ class Quadtree {
     show(p5: p5Types) {
         p5.stroke(255);
         p5.noFill();
-        p5.rectMode(p5.CENTER);
-        p5.rect(this.boundary.x, this.boundary.y, this.boundary.w * 2, this.boundary.h * 2);
+        // p5.rectMode(p5.CENTER);
+        p5.rect(this.boundary.x, this.boundary.y, this.boundary.w, this.boundary.h);
         if (this.divided) {
             this.northWest.show(p5);
             this.northEast.show(p5);
