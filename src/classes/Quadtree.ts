@@ -30,6 +30,7 @@ class Quadtree {
     private northEast: Quadtree;
     private southWest: Quadtree;
     private southEast: Quadtree;
+    private divided: boolean;
 
     constructor(boundary: Rectangle, capacity: number) {
         this.boundary = boundary;
@@ -39,19 +40,20 @@ class Quadtree {
     insert(point: Point) {
         if (this.points.length < this.capacity) {
             this.points.push(point);
-        } else {
+        } else if (!this.divided) {
             this.subdivide();
+            this.divided = true;
         }
     }
 
     subdivide() {
-        this.northWest = new Quadtree(new Rectangle(this.boundary.x, this.boundary.y, this.boundary.w / 2,
-            this.boundary.h / 2), this.capacity);
-        this.northEast = new Quadtree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y,
-            this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-        this.southWest = new Quadtree(new Rectangle(this.boundary.x, this.boundary.y + this.boundary.h / 2,
-            this.boundary.w / 2, this.boundary.h / 2), this.capacity);
-        this.southEast = new Quadtree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y + this.boundary.h / 2,
-            this.boundary.w / 2, this.boundary.h / 2), this.capacity);
+        // this.northWest = new Quadtree(new Rectangle(this.boundary.x, this.boundary.y, this.boundary.w / 2,
+        //     this.boundary.h / 2), this.capacity);
+        // this.northEast = new Quadtree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y,
+        //     this.boundary.w / 2, this.boundary.h / 2), this.capacity);
+        // this.southWest = new Quadtree(new Rectangle(this.boundary.x, this.boundary.y + this.boundary.h / 2,
+        //     this.boundary.w / 2, this.boundary.h / 2), this.capacity);
+        // this.southEast = new Quadtree(new Rectangle(this.boundary.x + this.boundary.w / 2, this.boundary.y + this.boundary.h / 2,
+        //     this.boundary.w / 2, this.boundary.h / 2), this.capacity);
     }
 }
