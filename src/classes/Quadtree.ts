@@ -79,6 +79,7 @@ class Quadtree {
                         continue;
                     }
                 }
+                this.points = [];
             }
 
             if (this.northWest.boundary.contains(point)) {

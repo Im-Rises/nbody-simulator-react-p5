@@ -8,7 +8,7 @@ type Props = {
 }
 
 const defaultProps: Props = {
-    particlesCount: 1000,
+    particlesCount: 10,
 }
 const NbodySimulatorBarnesHut = (props: Props) => {
     const mergedProps = {...defaultProps, ...props};
