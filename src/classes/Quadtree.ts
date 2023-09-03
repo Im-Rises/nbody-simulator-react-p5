@@ -3,10 +3,14 @@ import p5Types from "p5";
 class Point {
     public x: number;
     public y: number;
+    public weight: number;
+    public sumForces: p5Types.Vector;
 
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.weight = 10;
+        this.sumForces = new p5Types.Vector();
     }
 }
 
@@ -40,17 +44,27 @@ class Rectangle {
 
 class Quadtree {
     private boundary: Rectangle;
-    private capacity: number;
+    private readonly capacity: number;
+    private divided: boolean;
+    // private depth: number;
+    // private readonly maxDepth: number;
+    private weight: number;
+    private attractionCenter: Point;
+    private
     private points: Point[];
     private northWest: Quadtree;
     private northEast: Quadtree;
     private southWest: Quadtree;
     private southEast: Quadtree;
-    private divided: boolean;
 
     constructor(boundary: Rectangle, capacity: number) {
         this.boundary = boundary;
         this.capacity = capacity;
+        this.divided = false;
+        // this.depth = 0;
+        // this.maxDepth = 10;
+        this.weight = 0;
+        this.attractionCenter = new Point(0, 0);
         this.points = [];
     }
 
@@ -58,7 +72,7 @@ class Quadtree {
         if (!this.boundary.contains(point)) {
             return false;
         }
-        if (this.points.length < this.capacity) {
+        if (this.points.length < this.capacity && !this.divided) {
             this.points.push(point);
             return true;
         } else {
@@ -114,20 +128,57 @@ class Quadtree {
         this.divided = true;
     }
 
-    query(range: Rectangle, found: Point[]) {
-        if (!this.boundary.intersects(range)) {
-            return;
+    // Recursively calculate the weight of each node and the attraction center
+    calculateWeightAttractionCenter() {
+        if (this.divided) {
+            this.northWest.calculateWeightAttractionCenter();
+            this.northEast.calculateWeightAttractionCenter();
+            this.southWest.calculateWeightAttractionCenter();
+            this.southEast.calculateWeightAttractionCenter();
+            this.weight = this.northWest.weight + this.northEast.weight + this.southWest.weight + this.southEast.weight;
+            this.attractionCenter = new Point(
+                (this.northWest.attractionCenter.x +
+                    this.northEast.attractionCenter.x +
+                    this.southWest.attractionCenter.x +
+                    this.southEast.attractionCenter.x) / 4,
+                (this.northWest.attractionCenter.y +
+                    this.northEast.attractionCenter.y +
+                    this.southWest.attractionCenter.y +
+                    this.southEast.attractionCenter.y) / 4,
+            );
         } else {
             for (const p of this.points) {
-                if (range.contains(p)) {
-                    found.push(p);
-                }
+                this.weight += p.weight;
+                this.attractionCenter.x += p.x;
+                this.attractionCenter.y += p.y;
             }
-            if (this.divided) {
-                this.northWest.query(range, found);
-                this.northEast.query(range, found);
-                this.southWest.query(range, found);
-                this.southEast.query(range, found);
+        }
+    }
+
+    // Recursively calculate the sum of forces for each node
+    calculateSumForces(point: Point, theta: number) {
+        const s = this.boundary.w;
+        const d = Math.sqrt(Math.pow(this.attractionCenter.x - point.x, 2) + Math.pow(this.attractionCenter.y - point.y, 2));
+
+        if (this.divided) {
+            if (s / d < theta) {
+                const force = new p5Types.Vector(this.attractionCenter.x - point.x, this.attractionCenter.y - point.y);
+                force.setMag(0.1 * this.weight / d);
+                point.sumForces.add(force);
+            } else {
+                this.northWest.calculateSumForces(point, theta);
+                this.northEast.calculateSumForces(point, theta);
+                this.southWest.calculateSumForces(point, theta);
+                this.southEast.calculateSumForces(point, theta);
+            }
+        } else {
+            for (const p of this.points) {
+                if (p.x === point.x && p.y === point.y) {
+                    continue;
+                }
+                const force = new p5Types.Vector(p.x - point.x, p.y - point.y);
+                // force.setMag(0.1 * p.weight / d);
+                point.sumForces.add(force);
             }
         }
     }

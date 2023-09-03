@@ -24,11 +24,14 @@ const NbodySimulatorBarnesHut = (props: Props) => {
 
     // console.log(quadtree);
 
-    // Intersecting rectangle
-    const range = new Rectangle(250, 250, 100, 100);
-    const pointsIntIntersection = [];
-    quadtree.query(range, pointsIntIntersection);
-    console.log(pointsIntIntersection);
+    // // Intersecting rectangle
+    // const range = new Rectangle(250, 250, 100, 100);
+    // const pointsIntIntersection = [];
+    // quadtree.query(range, pointsIntIntersection);
+    // console.log(pointsIntIntersection);
+
+    quadtree.calculateWeightAttractionCenter();
+    console.log(quadtree);
 
 
     const setup = (p5: p5Types, canvasParentRef: Element) => {
@@ -40,16 +43,16 @@ const NbodySimulatorBarnesHut = (props: Props) => {
         p5.background(100);
         quadtree.show(p5);
 
-        // Draw the rectangle of intersection
-        p5.strokeWeight(1);
-        p5.stroke(0, 255, 0);
-        p5.rect(range.x - range.w, range.y - range.h, range.w * 2, range.h * 2);
-        // Draw all the points which are in the intersection
-        for (const p of pointsIntIntersection) {
-            p5.strokeWeight(4);
-            p5.stroke(0, 255, 0);
-            p5.point(p.x, p.y);
-        }
+        // // Draw the rectangle of intersection
+        // p5.strokeWeight(1);
+        // p5.stroke(0, 255, 0);
+        // p5.rect(range.x - range.w, range.y - range.h, range.w * 2, range.h * 2);
+        // // Draw all the points which are in the intersection
+        // for (const p of pointsIntIntersection) {
+        //     p5.strokeWeight(4);
+        //     p5.stroke(0, 255, 0);
+        //     p5.point(p.x, p.y);
+        // }
     };
 
     return <Sketch setup={setup} draw={draw}/>;
