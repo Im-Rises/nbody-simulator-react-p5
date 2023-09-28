@@ -21,7 +21,7 @@ type ComponentProps = {
 	particlesMass?: number;
 	softening?: number;
 	friction?: number;
-	centerAttractorMass?: number;
+	mouseAttractorMass?: number;
 	pixelsPerMeter?: number;
 	initColor?: Quadruplet;
 	finalColor?: Quadruplet;
@@ -42,7 +42,7 @@ const defaultProps = {
 	particlesMass: 400,
 	softening: 4,
 	friction: 0.99,
-	centerAttractorMass: 1000,
+	mouseAttractorMass: 10000,
 	pixelsPerMeter: 100,
 	initColor: [0, 255, 255, 200],
 	finalColor: [255, 0, 255, 200],
@@ -65,7 +65,7 @@ const NbodySimulator = (props: ComponentProps) => {
 	const particles: Particle[] = [];
 
 	// Attractor center
-	let attractorPosition: p5Types.Vector;
+	let mouseAttractorPosition: p5Types.Vector;
 
 	const forceDivCanvasHolderAndCanvasStyle = (canvas: p5Types.Element, canvasParentRef: Element) => {
 		// Set up canvas holder styles manually
@@ -90,7 +90,7 @@ const NbodySimulator = (props: ComponentProps) => {
 		p5.frameRate(mergedProps.frameRate);
 
 		// Create attractor
-		attractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
+		mouseAttractorPosition = p5.createVector(p5.width / 2, p5.height / 2).div(mergedProps.pixelsPerMeter);
 
 		// Create particles
 		Particle.setMass(mergedProps.particlesMass);
@@ -107,8 +107,9 @@ const NbodySimulator = (props: ComponentProps) => {
 			const randomFloat = (min: number, max: number) => min + ((max - min) * Math.random());
 			const pos = (p5.createVector(randomFloat(-1, 1), randomFloat(-1, 1))
 				.setMag(randomFloat(mergedProps.minSpawnRadius, mergedProps.maxSpawnRadius)));
-			const vel = pos.copy().rotate(Math.PI / 2).setMag(randomFloat(mergedProps.minSpawnVelocity, mergedProps.maxSpawnVelocity));
-			particles.push(new Particle(p5, posCentered.x + pos.x, posCentered.y + pos.y, vel.x, vel.y));
+			// const vel = pos.copy().rotate(Math.PI / 2).setMag(randomFloat(mergedProps.minSpawnVelocity, mergedProps.maxSpawnVelocity));
+			// particles.push(new Particle(p5, posCentered.x + pos.x, posCentered.y + pos.y, vel.x, vel.y));
+			particles.push(new Particle(p5, posCentered.x + pos.x, posCentered.y + pos.y, 0, 0));
 		}
 	};
 
@@ -124,10 +125,16 @@ const NbodySimulator = (props: ComponentProps) => {
 		if (fixedUpdateAccum >= fixedDeltaTime) {
 			fixedUpdateAccum = 0;
 
+			// Update mouse attractor position
+			if (p5.mouseIsPressed) {
+				mouseAttractorPosition = p5.createVector(p5.mouseX, p5.mouseY).div(mergedProps.pixelsPerMeter);
+			}
+
 			// Calculate forces applied to particles
 			for (const particle of particles) {
 				particle.updateForces(p5, particles, mergedProps.gravitationalConstant);
-				particle.updateForceWithValue(p5, attractorPosition, mergedProps.centerAttractorMass, mergedProps.gravitationalConstant);
+				particle.updateForceWithValue(
+					p5, mouseAttractorPosition, mergedProps.mouseAttractorMass, mergedProps.gravitationalConstant);
 			}
 
 			// Update particles velocity and position
