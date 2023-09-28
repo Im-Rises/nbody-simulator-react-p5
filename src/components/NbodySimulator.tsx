@@ -147,13 +147,15 @@ const NbodySimulator = (props: ComponentProps) => {
 		// Clear canvas
 		screenBuffer.background(mergedProps.backColor[0], mergedProps.backColor[1], mergedProps.backColor[2], mergedProps.backColor[3]);
 
+		// Draw attractor
+		screenBuffer.stroke(mergedProps.finalColor[0], mergedProps.finalColor[1], mergedProps.finalColor[2], mergedProps.finalColor[3]);
+		screenBuffer.strokeWeight(25);
+		screenBuffer.point(mouseAttractorPosition.x * mergedProps.pixelsPerMeter, mouseAttractorPosition.y * mergedProps.pixelsPerMeter);
+
 		// Draw objects
 		for (const particle of particles) {
 			particle.show(screenBuffer, mergedProps.pixelsPerMeter);
 		}
-
-		// Draw attractor
-		screenBuffer.fill(255, 0, 0);
 
 		// Swap buffers
 		p5.image(screenBuffer, 0, 0);
