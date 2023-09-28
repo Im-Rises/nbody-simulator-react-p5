@@ -11,9 +11,12 @@
 
 ## Description
 
-This is a n-body simulator package made with React Typescript and p5.js.
+This is an n-body simulator package made with React Typescript and p5.js.
 
-## 🚀🚀[You can try it online from your browser](https://im-rises.github.io/particle-simulator-react-p5-website/) 🚀🚀
+Bodies are attracted to each other by the gravitational force and by a center attractor which is defiend by clicking on
+the canvas.
+
+## 🚀🚀[You can try it online from your browser](https://im-rises.github.io/nbody-simulator-react-p5-website/) 🚀🚀
 
 It works on desktop and mobile as well with different controls (check the `controls` section).
 
@@ -22,6 +25,10 @@ It works on desktop and mobile as well with different controls (check the `contr
 > **Note**  
 > I also made a C++ version for WebGL2 using OpenGL ES 3.0. You can check it
 > out [here](https://github.com/Im-Rises/nbody-simulator-webgl).
+
+> **Note**  
+> I also made a version using Barnes-Hut algorithm. You can check it
+> out [here](https://github.com/Im-Rises/nbody-simulator-barnes-hut-react-p5).
 
 ## Screenshots
 
@@ -122,7 +129,7 @@ const App: React.FC = () => {
                             particlesMass={400}
                             softening={4}
                             friction={0.99}
-                            centerAttractorMass={1000}
+                            centerAttractorMass={10000}
                             pixelsPerMeter={100}
                             initColor={[0, 255, 255, 200]}
                             finalColor={[255, 0, 255, 200]}
